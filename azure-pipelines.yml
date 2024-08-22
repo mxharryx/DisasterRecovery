@@ -11,21 +11,11 @@ steps:
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        # Install the Azure Site Recovery CLI extension
-        az extension add --name site-recovery
-
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: 'AzureSPConnection'
-      scriptType: 'ps'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
         # Start a test failover
-        az recoveryservices replication recoveryplan test-failover start `
+        az site-recovery recovery-plan test-failover initiate `
         --resource-group RecoveryRG `
         --vault-name RecoveryVault `
-        --name PrimaryVMRecoveryPlan `
-        --failover-direction PrimaryToRecovery `
+        --recovery-plan-name PrimaryVMRecoveryPlan `
         --network-id /subscriptions/5518087e-908d-4cb5-ac6a-d09d9eef4fb6/resourceGroups/RecoveryRG/providers/Microsoft.Network/virtualNetworks/RecoveryVNet
 
   - task: AzureCLI@2
@@ -34,8 +24,8 @@ steps:
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        # Clean up after test failover
-        az recoveryservices replication recoveryplan test-failover cleanup `
+        # Commit the failover after validation (optional)
+        az site-recovery recovery-plan test-failover cleanup `
         --resource-group RecoveryRG `
         --vault-name RecoveryVault `
-        --name PrimaryVMRecoveryPlan
+        --recovery-plan-name PrimaryVMRecoveryPlan

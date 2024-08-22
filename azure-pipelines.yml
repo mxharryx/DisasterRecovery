@@ -21,7 +21,7 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         # Start a test failover
-        az site-recovery recovery-plan test-failover start `
+        az recoveryservices replication recoveryplan test-failover start `
         --resource-group RecoveryRG `
         --vault-name RecoveryVault `
         --name PrimaryVMRecoveryPlan `
@@ -35,7 +35,7 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         # Clean up after test failover
-        az site-recovery recovery-plan test-failover cleanup `
+        az recoveryservices replication recoveryplan test-failover cleanup `
         --resource-group RecoveryRG `
         --vault-name RecoveryVault `
         --name PrimaryVMRecoveryPlan

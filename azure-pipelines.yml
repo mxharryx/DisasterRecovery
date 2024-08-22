@@ -9,8 +9,8 @@ steps:
     inputs:
       azureSubscription: 'AzureSPConnection'
       ScriptType: 'InlineScript'
+      azurePowerShellVersion: 'LatestVersion'  
       Inline: |
-        
         # Variables
         $vaultName = "RecoveryVault"
         $rgName = "RecoveryRG"
@@ -24,8 +24,8 @@ steps:
     inputs:
       azureSubscription: 'AzureSPConnection'
       ScriptType: 'InlineScript'
+      azurePowerShellVersion: 'LatestVersion'
       Inline: |
-        
         # Variables
         $vaultName = "RecoveryVault"
         $rgName = "RecoveryRG"

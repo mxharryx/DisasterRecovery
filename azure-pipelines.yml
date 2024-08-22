@@ -11,6 +11,15 @@ steps:
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
+        # Install the Azure Site Recovery CLI extension
+        az extension add --name site-recovery
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'AzureSPConnection'
+      scriptType: 'ps'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
         # Start a test failover
         az site-recovery recovery-plan test-failover start `
         --resource-group RecoveryRG `

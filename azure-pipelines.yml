@@ -11,7 +11,6 @@ steps:
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        
         # Start a test failover
         az site-recovery recovery-plan test-failover start \
           --resource-group RecoveryRG \
@@ -26,22 +25,6 @@ steps:
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        
-        # Monitor the test failover job status
-        job_id=$(az site-recovery job list --resource-group RecoveryRG --vault-name RecoveryVault --query "[?properties.testFailover.recoveryPlanName=='PrimaryVMRecoveryPlan'].name | [0]" -o tsv)
-        az site-recovery job show \
-        --resource-group RecoveryRG \
-        --vault-name RecoveryVault \
-        --name $job_id \
-        --output table
-
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: 'AzureSPConnection'
-      scriptType: 'ps'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        
         # Clean up after test failover
         az site-recovery recovery-plan test-failover cleanup \
           --resource-group RecoveryRG \

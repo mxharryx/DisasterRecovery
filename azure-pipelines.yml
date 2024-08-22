@@ -12,12 +12,12 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         # Start a test failover
-        az site-recovery recovery-plan test-failover start \
-          --resource-group RecoveryRG \
-          --vault-name RecoveryVault \
-          --name PrimaryVMRecoveryPlan \
-          --failover-direction PrimaryToRecovery \
-          --network-id /subscriptions/5518087e-908d-4cb5-ac6a-d09d9eef4fb6/resourceGroups/RecoveryRG/providers/Microsoft.Network/virtualNetworks/RecoveryVNet
+        az site-recovery recovery-plan test-failover start `
+        --resource-group RecoveryRG `
+        --vault-name RecoveryVault `
+        --name PrimaryVMRecoveryPlan `
+        --failover-direction PrimaryToRecovery `
+        --network-id /subscriptions/5518087e-908d-4cb5-ac6a-d09d9eef4fb6/resourceGroups/RecoveryRG/providers/Microsoft.Network/virtualNetworks/RecoveryVNet
 
   - task: AzureCLI@2
     inputs:
@@ -26,7 +26,7 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         # Clean up after test failover
-        az site-recovery recovery-plan test-failover cleanup \
-          --resource-group RecoveryRG \
-          --vault-name RecoveryVault \
-          --name PrimaryVMRecoveryPlan
+        az site-recovery recovery-plan test-failover cleanup `
+        --resource-group RecoveryRG `
+        --vault-name RecoveryVault `
+        --name PrimaryVMRecoveryPlan

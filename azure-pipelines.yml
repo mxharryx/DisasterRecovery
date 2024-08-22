@@ -21,10 +21,10 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         # Initiate a test failover
-        az site-recovery replication-failover-test initiate `
+        az site-recovery failover-test initiate `
         --resource-group RecoveryRG `
         --vault-name RecoveryVault `
-        --name PrimaryVMRecoveryPlan `
+        --recovery-plan-name PrimaryVMRecoveryPlan `
         --network-id /subscriptions/5518087e-908d-4cb5-ac6a-d09d9eef4fb6/resourceGroups/RecoveryRG/providers/Microsoft.Network/virtualNetworks/RecoveryVNet
 
   - task: AzureCLI@2
@@ -34,7 +34,7 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         # Clean up after test failover
-        az site-recovery replication-failover-test cleanup `
+        az site-recovery failover-test cleanup `
         --resource-group RecoveryRG `
         --vault-name RecoveryVault `
-        --name PrimaryVMRecoveryPlan
+        --recovery-plan-name PrimaryVMRecoveryPlan

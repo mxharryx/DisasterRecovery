@@ -5,36 +5,33 @@ pool:
   vmImage: 'windows-latest'
 
 steps:
-  - task: AzureCLI@2
+  - task: AzurePowerShell@5
     inputs:
       azureSubscription: 'AzureSPConnection'
-      scriptType: 'ps'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        # Install the Azure Site Recovery CLI extension (if not already installed)
-        az extension add --name site-recovery
+      ScriptType: 'InlineScript'
+      Inline: |
+        
+        # Variables
+        $vaultName = "RecoveryVault"
+        $rgName = "RecoveryRG"
+        $recoveryPlanName = "PrimaryVMRecoveryPlan"
 
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: 'AzureSPConnection'
-      scriptType: 'ps'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        # Initiate a test failover
-        az site-recovery failover-test initiate `
-        --resource-group RecoveryRG `
-        --vault-name RecoveryVault `
-        --recovery-plan-name PrimaryVMRecoveryPlan `
-        --network-id /subscriptions/5518087e-908d-4cb5-ac6a-d09d9eef4fb6/resourceGroups/RecoveryRG/providers/Microsoft.Network/virtualNetworks/RecoveryVNet
+        # Initiate a Test Failover
+        $rp = Get-AzRecoveryServicesAsrRecoveryPlan -ResourceGroupName $rgName -Name $recoveryPlanName -VaultId (Get-AzRecoveryServicesVault -Name $vaultName).Id
+        Start-AzRecoveryServicesAsrTestFailoverJob -InputObject $rp -NetworkId /subscriptions/5518087e-908d-4cb5-ac6a-d09d9eef4fb6/resourceGroups/RecoveryRG/providers/Microsoft.Network/virtualNetworks/RecoveryVNet
 
-  - task: AzureCLI@2
+  - task: AzurePowerShell@5
     inputs:
       azureSubscription: 'AzureSPConnection'
-      scriptType: 'ps'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        # Clean up after test failover
-        az site-recovery failover-test cleanup `
-        --resource-group RecoveryRG `
-        --vault-name RecoveryVault `
-        --recovery-plan-name PrimaryVMRecoveryPlan
+      ScriptType: 'InlineScript'
+      Inline: |
+        
+        # Variables
+        $vaultName = "RecoveryVault"
+        $rgName = "RecoveryRG"
+        $recoveryPlanName = "PrimaryVMRecoveryPlan"
+
+        # Cleanup Test Failover
+        $rp = Get-AzRecoveryServicesAsrRecoveryPlan -ResourceGroupName $rgName -Name $recoveryPlanName -VaultId (Get-AzRecoveryServicesVault -Name $vaultName).Id
+        Stop-AzRecoveryServicesAsrTestFailoverJob -InputObject $rp
+        Write-Host "Cleanup Completed Successfully."
